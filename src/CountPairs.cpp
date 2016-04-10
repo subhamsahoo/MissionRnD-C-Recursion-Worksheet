@@ -29,8 +29,15 @@ int count_pairs(char *str, int len, int start, int end){
 
 int count_pairs_wrapper(char *str,int len){
     //Wrapper function which might call a recursive function ,which might take extra parameters .
+	if (str==NULL||len<3)
 	return 0;
-
+	int count = 0;
+	for (int i = 0; i < len - 2; i++)
+	{
+		if (str[i] == str[i + 2])
+			count++;
+	}
+	return count;
 }
 
 
