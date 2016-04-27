@@ -43,6 +43,129 @@ P.S: The Above Problem is just a modified version of a popular BackTracking prob
 */
 
 #include "stdafx.h"
-int solve_nsnipers(int *battlefield, int n){
-	return 0;
+
+int coll(int a, int b, int *snip, int num, int i, int j);
+int solve(int *snip, int num, int i);
+int check(int a, int b, int *snip, int num);
+
+
+int solve(int *snip, int num,int i)
+{
+	int j;
+
+	for (j = 0; j < num && i < num; j++)
+	
+	{
+	
+		if (check(i, j, snip, num) == 1)
+		
+		{
+		
+			*((snip + i*num) + j) = 1;
+			
+			if (solve(snip, num, i + 1) == 0)
+			
+				*((snip + i*num) + j) = 0;
+			
+			else return 1;
+		}
+
+	}
+	
+	if (j < num && i == num)
+	
+		return 1;
+	
+	else return 0;
 }
+
+
+int coll(int a, int b, int *snip, int num, int i, int j)
+
+{
+
+
+	int k, l;
+
+	if (b == j)
+
+		return 0;
+
+	k = i + 1;
+
+	l = j + 1;
+
+	while (k != a + 1)
+
+	{
+
+		if (k == a && l == b)
+
+			return 0;
+
+		k++;
+
+		l++;
+
+	}
+
+	k = i + 1;
+
+	l = j - 1;
+
+	while (k != a + 1 && l >= 0)
+
+	{
+
+
+		if (k == a && l == b)
+
+			return 0;
+
+		k++;
+
+		l--;
+
+	}
+
+	return 1;
+}
+
+int check(int a, int b, int *snip, int num)
+{
+	
+	int i, j;
+	
+	for (j = 0, i = 0; j < num && i < a; j++)
+	
+	{
+	
+		if (*((snip + i*num) + j) == 1)
+		
+		{
+		
+			if (coll(a, b, snip, num, i, j) == 0)
+			
+				return 0;
+			i++;
+
+			
+			j = -1;
+		}
+	}
+
+	return 1;
+}
+
+
+
+int solve_nsnipers(int *battlefield, int n){
+	
+	if (battlefield == NULL || n < 1)
+	
+		return 0;
+	
+	return solve(battlefield, n, 0);
+
+}
+

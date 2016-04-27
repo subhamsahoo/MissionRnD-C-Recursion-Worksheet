@@ -33,8 +33,46 @@ Note : Check the function Parameters ,Its a double pointer .
 
 #include "stdafx.h"
 #include<stdlib.h>
-
+int *wrapper(int **input_array, int *result, int rows, int columns, int a, int b, int c, int d, int i);
 int *spiral(int rows, int columns, int **input_array)
 {
-	return NULL;
+	if (input_array == NULL || rows<1 || columns<1)
+		return NULL;
+	int *result = (int *)malloc(sizeof(int)*(rows*columns));
+	result = wrapper(input_array, result, rows, columns, 0, rows - 1, 0, columns - 1, 0);
+	return result;
+}
+int *wrapper(int **input_array, int *result, int rows, int columns, int a, int b, int c, int d, int i)
+{
+	int k;
+	if (i > rows*columns - 1)
+		return result;
+	else
+	{
+		for (k = c; k <= d; k = k + 1)
+			result[i++] = input_array[a][k];
+		a++;
+		for (k = a; k <= b; k = k + 1)
+			result[i++] = input_array[k][d];
+		d--;
+		if (a < b)
+		{
+			for (k = d; k >= c; k -= 1)
+				result[i++] = input_array[b][k];
+			b--;
+		}
+		if (c < d)
+		{
+			for (k = b; k >= a; k -= 1)
+				result[i++] = input_array[k][c];
+			c++;
+		}
+		if (i == rows*columns - 1)
+		{
+			if (a == c && b == d)
+				result[i] = input_array[a][d];
+			return result;
+		}
+	}
+	return wrapper(input_array, result, rows, columns, a, b, c, d, i);
 }

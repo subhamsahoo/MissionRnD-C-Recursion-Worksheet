@@ -34,9 +34,26 @@ more parameters .
 */
 
 #include<stdlib.h>
-
-
+int exists(int *maze, int rows, int columns, int x1, int y1, int x2, int y2, int a, int b, int c, int d, int e, int f);
 int path_exists(int *maze, int rows, int columns, int x1, int y1, int x2, int y2)
 {
-	return 1;
+	if (rows<1 || columns<1 || x1<0 || x1>rows - 1 || y1<0 || y1>columns - 1)return 0;
+	if (*((maze + x1*columns) + y1) != 1 || *((maze + x2*columns) + y2) != 1)return 0;
+	if (exists(maze, rows, columns, x1, y1, x2, y2, 0, 0, 0, 0, x1, y1) == 0)return 0;
+	else return 1;
+}
+
+
+
+int exists(int *maze, int rows, int columns, int x1, int y1, int x2, int y2, int a, int b, int c, int d, int e, int f)
+{
+	int result = 0;
+	if (x2 == x1 && y2 == y1)return 1;
+	if (rows<1 || columns<1 || x1<0 || x1>rows - 1 || y1<0 || y1>columns - 1)return 0;
+	if (*((maze + x1*columns) + y1) != 1)return 0;
+	if ((y1 - 1 > -1 && b == 0) && (x1 != e || y1 - 1 != f))result = result + exists(maze, rows, columns, x1, y1 - 1, x2, y2, 1, 0, 0, 0, e, f);
+	 if ((y1 + 1 < columns&&a == 0) && (x1 != e || y1 + 1 != f))result = result + exists(maze, rows, columns, x1, y1 + 1, x2, y2, 0, 1, 0, 0, e, f);
+	 if ((x1 - 1 > -1 && d == 0) && (x1 - 1 != e || y1 != f))result = result + exists(maze, rows, columns, x1 - 1, y1, x2, y2, 0, 0, 1, 0, e, f);
+	 if ((x1 + 1 < rows&&c == 0) && (x1 + 1 != e || y1 != f))result = result + exists(maze, rows, columns, x1 + 1, y1, x2, y2, 0, 0, 0, 1, e, f);
+	return result;
 }
